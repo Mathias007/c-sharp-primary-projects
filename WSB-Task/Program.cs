@@ -6,11 +6,16 @@ namespace WSB_Task
     {
         static void Main(string[] args)
         {
+            double firstNumber;
+            double secondNumber;
+
             Console.WriteLine("Witaj w aplikacji Kalkulator");
             Console.WriteLine("Aby kontynuować, podaj dwie liczby");
+            Console.Write("Pierwsza liczba: ");
+            firstNumber = double.Parse(Console.ReadLine());
 
-            double firstNumber = double.Parse(Console.ReadLine());
-            double secondNumber = double.Parse(Console.ReadLine());
+            Console.Write("Druga liczba: ");
+            secondNumber = double.Parse(Console.ReadLine());
 
             Console.WriteLine($"Wybrałeś liczby: {firstNumber} oraz {secondNumber}");
 
@@ -28,25 +33,25 @@ namespace WSB_Task
             switch (choosenOperator)
             {
                 case 0:
-                    Console.WriteLine("Wybrałeś dodawanie");
+                    Console.WriteLine($"Wybrałeś {calcOperations[choosenOperator].ToUpper()} ");
                     operationResult = firstNumber + secondNumber;
                     Console.WriteLine($"Wynik dodawania: {operationResult}");
                     break;
 
                 case 1:
-                    Console.WriteLine("Wybrałeś odejmowanie");
+                    Console.WriteLine($"Wybrałeś {calcOperations[choosenOperator].ToUpper()} ");
                     operationResult = firstNumber - secondNumber;
                     Console.WriteLine($"Wynik odejmowania: {operationResult}");
                     break;
 
                 case 2:
-                    Console.WriteLine("Wybrałeś mnożenie");
+                    Console.WriteLine($"Wybrałeś {calcOperations[choosenOperator].ToUpper()} ");
                     operationResult = firstNumber * secondNumber;
                     Console.WriteLine($"Wynik dodawania: {operationResult}");
                     break;
 
                 case 3:
-                    Console.WriteLine("Wybrałeś dzielenie");
+                    Console.WriteLine($"Wybrałeś {calcOperations[choosenOperator].ToUpper()} ");
                     if (secondNumber != 0)
                     {
                         operationResult = firstNumber / secondNumber;
@@ -58,7 +63,7 @@ namespace WSB_Task
                     break;
 
                 case 4:
-                    Console.WriteLine("Wybrałeś potęgowanie. Którą z wpisanych wcześniej liczb chciałbyś mu poddać?");
+                    Console.WriteLine($"Wybrałeś {calcOperations[choosenOperator].ToUpper()}. Którą z wpisanych wcześniej liczb chciałbyś poddać podniesieniu do kwadratu? ");
                     Console.WriteLine(" 1 - Pierwszą \n 2 - Drugą");
                     int numberSelectedToOperation = int.Parse(Console.ReadLine());
                     if (numberSelectedToOperation == 1)
@@ -78,22 +83,46 @@ namespace WSB_Task
                     break;
 
                 case 5:
-                    Console.WriteLine("Wybrałeś pierwiastkowanie");
-                    operationResult = firstNumber + secondNumber;
-                    Console.WriteLine($"Wynik dodawania: {operationResult}");
+                    Console.WriteLine($"Wybrałeś {calcOperations[choosenOperator].ToUpper()}. Którą z wpisanych wcześniej liczb chciałbyś mu poddać w celu uzyskania pierwiastka kwadratowego?");
+                    Console.WriteLine(" 1 - Pierwszą \n 2 - Drugą");
+                    numberSelectedToOperation = int.Parse(Console.ReadLine());
+                    if (numberSelectedToOperation == 1)
+                    {
+                        operationResult = Math.Sqrt(firstNumber);
+                        Console.WriteLine($"Wynik pierwiastkowania: {operationResult}");
+
+                    }
+                    else if (numberSelectedToOperation == 2)
+                    {
+                        operationResult = Math.Sqrt(secondNumber);
+                        Console.WriteLine($"Wynik pierwiastkowania: {operationResult}");
+                    }
+                    else
+                    {
+                        throw new Exception("Nieprawidłowy wybór!");
+                    }
                     break;
 
                 case 6:
-                    Console.WriteLine("Wybrałeś dodawanie");
-                    operationResult = firstNumber + secondNumber;
-                    Console.WriteLine($"Wynik dodawania: {operationResult}");
+                    Console.WriteLine("Wybrałeś obliczanie procentu, jaki pierwsza wpisana liczba stanowi wobec drugiej");
+                    operationResult = firstNumber / secondNumber * 100;
+                    Console.WriteLine($"Liczba {firstNumber} stanowi {operationResult}% liczby {secondNumber}. Czy chcesz odwrócić wartości?");
+                    Console.WriteLine("Naciśnij Y, jeżeli jesteś zainteresowany wykonaniem dodatkowej operacji.");
+                    string userReplacementExpectations = Console.ReadLine();
+
+                    if (userReplacementExpectations.ToUpper() == "Y")
+                    {
+                        operationResult = secondNumber / firstNumber * 100;
+                        Console.WriteLine($"Liczba {secondNumber} stanowi {operationResult}% liczby {firstNumber}.");
+                    }
+
                     break;
 
                 default:
                     throw new Exception("Nieprawidłowy operator!");
             }
 
-
+            Console.WriteLine("Naciśnij dowolny klawisz, aby zakończyć pracę kalkulatora");
             Console.Read();
         }
     }
