@@ -1,4 +1,11 @@
-﻿using System;
+﻿
+/* Podstawy Programowania sem. I WSB (2021/2022) - tablica dwuwymiarowa wypełniana znakami.
+ * Autor rozwiązania: Mateusz Stawowski (https://github.com/Mathias007).
+ * Link do zbiorczego repozytorium: https://github.com/Mathias007/WSB-Task.
+ * W końcowej wersji zastąpiłem zagnieżdżone if/else poprzez użycie ternary operatora (mniej kodu).
+ */
+
+using System;
 
 namespace WSB_Task2
 {
@@ -17,32 +24,9 @@ namespace WSB_Task2
                 {
                     for (int row = 0; row < matrixHeight; row++)
                     {
-                        string symbolToAdd;
-
-                        if (row < matrixHeight / 2)
-                        {
-                            if (col < matrixWidth / 2)
-                            {
-                                symbolToAdd = "%";
-                            }
-                            else
-                            {
-                                symbolToAdd = "#";
-                            }
-                        }
-                        else
-                        {
-                            if (col < matrixWidth / 2)
-                            {
-                                symbolToAdd = "*";
-                            }
-                            else
-                            {
-                                symbolToAdd = "+";
-                            }
-                        }
-
-                        matrixArray[col, row] = symbolToAdd;
+                        matrixArray[col, row] = (row < matrixHeight / 2) 
+                            ? (col < matrixWidth / 2 ? "%" : "#") 
+                            : (col < matrixWidth / 2 ? "*" : "+");
                         Console.Write(matrixArray[col, row]);
                     }
                     Console.Write("\n");
