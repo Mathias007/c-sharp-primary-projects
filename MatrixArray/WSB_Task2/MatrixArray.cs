@@ -16,29 +16,33 @@ namespace WSB_Task2
                 for (int col = 0; col < matrixWidth; col++)
                 {
                     for (int row = 0; row < matrixHeight; row++)
-                    {                        
+                    {
+                        string symbolToAdd;
+
                         if (row < matrixHeight / 2)
                         {
                             if (col < matrixWidth / 2)
                             {
-                                matrixArray[col, row] = "%";
+                                symbolToAdd = "%";
                             }
                             else
                             {
-                                matrixArray[col, row] = "#";
+                                symbolToAdd = "#";
                             }
                         }
                         else
                         {
                             if (col < matrixWidth / 2)
                             {
-                                matrixArray[col, row] = "*";
+                                symbolToAdd = "*";
                             }
                             else
                             {
-                                matrixArray[col, row] = "+";
+                                symbolToAdd = "+";
                             }
                         }
+
+                        matrixArray[col, row] = symbolToAdd;
                         Console.Write(matrixArray[col, row]);
                     }
                     Console.Write("\n");
