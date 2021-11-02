@@ -11,34 +11,55 @@ namespace WSB_Task3
 {
     class PrimeNumbers
     {
-        public static int PrimeTest(int numberToCheck, int potencialDivider = 2)
+        private static bool IsNumberEven(int numberToCheck)
         {
-            if (numberToCheck > 1)
+            if (numberToCheck % 2 == 0)
             {
-                if (potencialDivider <= Math.Sqrt(numberToCheck))
+                Console.WriteLine("Podana liczba nie jest pierwsza, ponieważ jest parzysta");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Podana liczba jest nieparzysta, zatem podlega dalszym sprawdzeniom (dzielniki nieparzyste)");
+                return false;
+            }
+        }
+
+        private static bool IsNumberPrime(int numberToCheck, int potencialDivider = 3)
+        {
+            if (potencialDivider <= Math.Sqrt(numberToCheck))
+            {
+                if (numberToCheck % potencialDivider == 0)
                 {
-                    if (numberToCheck % potencialDivider == 0)
-                    {
-                        Console.WriteLine("Liczba nie jest pierwsza, ponieważ dzieli się m. in. przez " + potencialDivider);
-                        return potencialDivider;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Sprawdzam dzielnik " + potencialDivider);
-                        potencialDivider++;
-                        return PrimeTest(numberToCheck, potencialDivider);
-                    }
+                    Console.WriteLine("Liczba nie jest pierwsza. Najmniejszy wykryty dzielnik:" + potencialDivider);
+                    return false;
                 }
                 else
                 {
-                    Console.WriteLine("Wpisana liczba jest pierwsza!");
-                    return numberToCheck;
+                    Console.WriteLine("Sprawdzam dzielnik " + potencialDivider);
+                    potencialDivider += 2;
+                    return IsNumberPrime(numberToCheck, potencialDivider);
                 }
-            } else
+            }
+            else
+            {
+                Console.WriteLine("Wpisana liczba jest pierwsza!");
+                return true;
+            }
+        }
+
+        public static bool PrimeTest(int numberToCheck)
+        {
+            if (numberToCheck > 1)
+            {
+                if (!IsNumberEven(numberToCheck) && IsNumberPrime(numberToCheck)) return true;
+                else return false;
+            }
+            else
             {
                 Console.WriteLine("Wpisz poprawną liczbę!");
-                return numberToCheck;
-            }
+                return false;
+            }                      
         }
 
         static void Main(string[] args)
