@@ -13,26 +13,29 @@ namespace WSB_Task3
     {
         private static bool IsNumberEven(int numberToCheck)
         {
-            if (numberToCheck % 2 == 0)
-            {
-                Console.WriteLine("Podana liczba nie jest pierwsza, ponieważ jest parzysta");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Podana liczba jest nieparzysta, zatem podlega dalszym sprawdzeniom (dzielniki nieparzyste)");
-                return false;
-            }
+            bool evenTestResult = !Convert.ToBoolean(numberToCheck % 2);
+
+            Console.WriteLine("Sprawdzam dzielnik 2 (sprawdzenie wstępne)");
+
+            string evenTestMessage = evenTestResult 
+                ? "Podana liczba nie jest pierwsza, ponieważ jest parzysta" 
+                : "Podana liczba jest nieparzysta, zatem podlega dalszym sprawdzeniom (dzielniki nieparzyste)";
+
+            Console.WriteLine(evenTestMessage);
+
+            return evenTestResult;
         }
 
         private static bool IsNumberPrime(int numberToCheck, int potencialDivider = 3)
         {
+            bool primeTestResult = Convert.ToBoolean(numberToCheck % potencialDivider);
+
             if (potencialDivider <= Math.Sqrt(numberToCheck))
             {
-                if (numberToCheck % potencialDivider == 0)
+                if (!primeTestResult)
                 {
-                    Console.WriteLine("Liczba nie jest pierwsza. Najmniejszy wykryty dzielnik:" + potencialDivider);
-                    return false;
+                    Console.WriteLine("Liczba nie jest pierwsza. Najmniejszy wykryty dzielnik: " + potencialDivider);
+                    return primeTestResult;
                 }
                 else
                 {
@@ -44,15 +47,20 @@ namespace WSB_Task3
             else
             {
                 Console.WriteLine("Wpisana liczba jest pierwsza!");
-                return true;
+                return primeTestResult;
             }
         }
 
         public static bool PrimeTest(int numberToCheck)
-        {
+        {               
             if (numberToCheck > 1)
             {
-                if (!IsNumberEven(numberToCheck) && IsNumberPrime(numberToCheck)) return true;
+                if (numberToCheck == 2)
+                {
+                    Console.WriteLine("Wpisana liczba jest pierwsza, ponieważ wynosi 2!");
+                    return true;
+                }
+                else if (!IsNumberEven(numberToCheck) && IsNumberPrime(numberToCheck)) return true;
                 else return false;
             }
             else
