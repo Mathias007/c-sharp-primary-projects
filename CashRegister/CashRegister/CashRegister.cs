@@ -1,4 +1,24 @@
-﻿using System;
+﻿
+/* Projekt aplikacji rozpoznającej kasy sklepowej wykorzystującej struktury, przygotowany na zajęcia z Podstaw Programowania sem. I WSB (2021/2022).
+ * Autor rozwiązania: Mateusz Stawowski (https://github.com/Mathias007).
+ * Link do repozytorium zbiorczego: https://github.com/Mathias007/WSB-Task.
+ * 
+ * Za pomocą instrukcji warunkowych, pętli oraz typów strukturowych napisać program który obsługuje prostą kasę sklepową z użyciem metod.
+ * Sklep ma mieć zdefiniowaną strukturę artykułów. Należy uwzględnić cenę za sztukę i osobno cenę za kg!
+ * Artykułów ma być max 5. zdefiniowanych jako elementy struktury!
+ * Użytkownik (Kasjer) ma mieć możliwość wybierania artykułu, podawania jego ilości, lub wagi.
+ * 
+ * Oczekiwane działanie programu:
+ * Powitanie (✓) -> Wybór artykuły (✓) -> Czyszczenie ekranu i zadanie pytania o ilość danego artykułu (✓) 
+ * -> Wprowadzenie danych (✓) -> Pytanie czy kasjer chce dodać następny czy ma wydrukować paragon (✓)
+ * -> Jeśli następny towar, ponowne czyszczenie ekranu i wybór artykułu (✓) -> powtórzenie dodawania i pytania (✓)
+ * -> Jeśli zakończenie to ma pojawić się lista zakupionych towarów wraz z ich ilością oraz ceną, oraz podsumowanie kwoty całego rachunku (✓)
+ * -> Opcja zamknij program / Nowy Klient (✗)
+ */
+
+
+using System;
+using System.Collections.Generic;
 
 namespace WSB_Task4
 {
@@ -11,12 +31,31 @@ namespace WSB_Task4
             public double weight; // waga jednostki (kg)
             public double price; // cena jednostkowa (PLN)
             public double price_per_kg; // cena za 1 kg (PLN)
-            // public double energy; // wartość energetyczna 1 sztuki (kcal)
+        }
+
+        struct BillPosition
+        {
+            public string name; // nazwa produktu
+            public string unit; // jednostka ilości
+            public double quantity; // ilość produktu
+            public double price; // cena do zapłaty
+        }
+
+        private static string ChooseUnit()
+        {
+            Console.WriteLine("Jeśli chcesz zarejestrować zakup na wagę, wybierz W, w przeciwnym razie zarejestrujemy zakup na sztuki.");
+            return Console.ReadLine().ToUpper() == "W" ? "kg" : "szt";
+        }
+
+        private static double CustomizeQuantity(string unit)
+        {
+            Console.WriteLine($"Ile {unit} zostało zakupionych?");
+            return double.Parse(Console.ReadLine().Replace('.', ','));
         }
 
         private static double CalculatePrice(double productPrice, double productQuantity)
         {
-            return productQuantity * productPrice;
+            return Math.Round(productQuantity * productPrice, 2);
         }
 
         private static void ShowProductInfo(int productId, string productName, double productWeight, double productPrice, double productPricePerKg)
@@ -27,30 +66,30 @@ namespace WSB_Task4
             Console.WriteLine($"Cena za 1 kg: {productPricePerKg}");
         }
 
-        private static double CustomizeProductQuantity(double productPrice, double productPricePerKg)
+        private static BillPosition AddProductToBill(string productName, double productPrice, double productPricePerKg)
         {
-            Console.WriteLine("Jeśli chcesz zarejestrować zakup na kilogramy, wybierz K, w przeciwnym razie zarejestrujemy zakup na sztuki.");
-            string choosenValue = Console.ReadLine().ToUpper() == "K" ? "kg" : "szt";
-            Console.WriteLine($"Ile {choosenValue} zostało zakupionych?");
-            double productQuantity = double.Parse(Console.ReadLine().Replace('.', ','));
+            BillPosition addingPosition;
 
-            double finalProductPrice = CalculatePrice((choosenValue == "szt" ? productPrice : productPricePerKg), productQuantity);
+            addingPosition.name = productName;
+            addingPosition.unit = ChooseUnit();
+            addingPosition.quantity = CustomizeQuantity(addingPosition.unit);
+            addingPosition.price = CalculatePrice((addingPosition.unit == "szt" ? productPrice : productPricePerKg), addingPosition.quantity);
 
-            Console.WriteLine($"Cena za {productQuantity} {choosenValue} wybranego produktu to {finalProductPrice} zł.");
+            Console.WriteLine($"Cena za {addingPosition.quantity} {addingPosition.unit} produktu {addingPosition.name} wynosi {addingPosition.price} zł.");
 
-            return finalProductPrice;
+            return addingPosition;
         }
 
-        public static double HandleProductCustomization(int productId, string productName, double productWeight, double productPrice, double productPricePerKg)
+        private static BillPosition HandleProductCustomization(int productId, string productName, double productWeight, double productPrice, double productPricePerKg)
         {
             ShowProductInfo(productId, productName, productWeight, productPrice, productPricePerKg);
-            return CustomizeProductQuantity(productPrice, productPricePerKg);
+            return AddProductToBill(productName, productPrice, productPricePerKg);
         }
-
 
         static void Main(string[] args)
         {
             double bill = 0;
+            var billList = new List<BillPosition>();
 
             Product apple;
             Product banana;
@@ -90,12 +129,13 @@ namespace WSB_Task4
 
             Product[] productsArray = new Product[5] { apple, banana, potato, tomato, cucumber };
 
-            Console.WriteLine("Witamy w naszym warzywniaku! Wybierz produkt z listy poniżej");
+            Console.WriteLine("Witamy w naszym warzywniaku!");
 
             bool isBillOpened = true;
 
             while (isBillOpened)
             {
+                Console.WriteLine("Wybierz produkt z listy poniżej");
 
                 for (int i = 0; i < productsArray.Length; i++)
                 {
@@ -106,24 +146,49 @@ namespace WSB_Task4
                 var choosenProduct = int.Parse(Console.ReadLine());
                 Console.WriteLine($"Wybrałeś {productsArray[choosenProduct].name.ToUpper()}. \n");
 
-                bill += HandleProductCustomization(
-                    productsArray[choosenProduct].id,
-                    productsArray[choosenProduct].name,
-                    productsArray[choosenProduct].weight,
-                    productsArray[choosenProduct].price,
-                    productsArray[choosenProduct].price_per_kg
-                );
+                Console.Clear();
+
+                billList.Add(HandleProductCustomization(
+                       productsArray[choosenProduct].id,
+                       productsArray[choosenProduct].name,
+                       productsArray[choosenProduct].weight,
+                       productsArray[choosenProduct].price,
+                       productsArray[choosenProduct].price_per_kg
+                ));
 
                 Console.WriteLine("Czy chcesz kontynuować? Jeżeli tak, naciśnij Y. Jeżeli nie - wybierz dowolny klawisz, aby wydrukować rachunek.");
                 Console.Write("    Twoja decyzja: ");
                 if (Console.ReadLine().ToUpper() != "Y")
                 {
+                    Console.Clear();
+
+                    Console.WriteLine("Drukuję rachunek...");
+                    foreach (BillPosition billSegment in billList)
+                    {
+                        int billPosition = 1;
+                        Console.WriteLine($"{billPosition}. {billSegment.name} - zakupiono {billSegment.quantity} {billSegment.unit}, cena: {billSegment.price} zł.");
+                        bill += billSegment.price;
+                        billPosition++;
+                    }
                     Console.WriteLine($"Rachunek osiągnął wysokość: {bill} zł.");
-                    Console.WriteLine("Dziękujemy za skorzystanie z programu.");
-                    isBillOpened = !isBillOpened;
+
+          //         Console.WriteLine("Czy chcesz zarejestrować nowego klienta? Jeżeli tak, naciśnij Y. Jeżeli nie - wybierz dowolny klawisz, aby zakończyć pracę programu.");
+          //         Console.Write("    Twoja decyzja: ");
+          //         if (Console.ReadLine().ToUpper() != "Y")
+          //         {
+          //               Console.Clear();
+          //             bill = 0;
+          //               billList.Clear();
+          //          } else
+          //          {
+                        isBillOpened = !isBillOpened;
+          //          }
+                } else
+                {
+                    Console.Clear();
                 }
             }
-                Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }
