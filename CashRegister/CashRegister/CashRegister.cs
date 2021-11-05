@@ -3,17 +3,17 @@
  * Autor rozwiązania: Mateusz Stawowski (https://github.com/Mathias007).
  * Link do repozytorium zbiorczego: https://github.com/Mathias007/WSB-Task.
  * 
- * Za pomocą instrukcji warunkowych, pętli oraz typów strukturowych napisać program który obsługuje prostą kasę sklepową z użyciem metod.
- * Sklep ma mieć zdefiniowaną strukturę artykułów. Należy uwzględnić cenę za sztukę i osobno cenę za kg!
- * Artykułów ma być max 5. zdefiniowanych jako elementy struktury!
- * Użytkownik (Kasjer) ma mieć możliwość wybierania artykułu, podawania jego ilości, lub wagi.
+ * Za pomocą instrukcji warunkowych, pętli oraz typów strukturowych napisać program który obsługuje prostą kasę sklepową z użyciem metod. (✓)
+ * Sklep ma mieć zdefiniowaną strukturę artykułów. Należy uwzględnić cenę za sztukę i osobno cenę za kg! (✓)
+ * Artykułów ma być max 5. zdefiniowanych jako elementy struktury! (✓)
+ * Użytkownik (Kasjer) ma mieć możliwość wybierania artykułu (✓), podawania jego ilości (✓), lub wagi (✓).
  * 
  * Oczekiwane działanie programu:
  * Powitanie (✓) -> Wybór artykuły (✓) -> Czyszczenie ekranu i zadanie pytania o ilość danego artykułu (✓) 
  * -> Wprowadzenie danych (✓) -> Pytanie czy kasjer chce dodać następny czy ma wydrukować paragon (✓)
  * -> Jeśli następny towar, ponowne czyszczenie ekranu i wybór artykułu (✓) -> powtórzenie dodawania i pytania (✓)
  * -> Jeśli zakończenie to ma pojawić się lista zakupionych towarów wraz z ich ilością oraz ceną, oraz podsumowanie kwoty całego rachunku (✓)
- * -> Opcja zamknij program / Nowy Klient (✗)
+ * -> Opcja zamknij program / Nowy Klient (✓)
  */
 
 
@@ -86,6 +86,83 @@ namespace WSB_Task4
             return AddProductToBill(productName, productPrice, productPricePerKg);
         }
 
+        private static BillPosition SelectProduct(Product[] productsArray)
+        {
+            Console.WriteLine("Wybierz produkt z listy poniżej");
+
+            for (int i = 0; i < productsArray.Length; i++)
+            {
+                Console.WriteLine($"       {i} - {productsArray[i].name.ToUpper()}");
+            }
+
+            Console.Write("     Twój wybór: ");
+            var choosenProduct = int.Parse(Console.ReadLine());
+            Console.WriteLine($"Wybrałeś {productsArray[choosenProduct].name.ToUpper()}. \n");
+
+            Console.Clear();
+
+            return HandleProductCustomization(
+                     productsArray[choosenProduct].id,
+                     productsArray[choosenProduct].name,
+                     productsArray[choosenProduct].weight,
+                     productsArray[choosenProduct].price,
+                     productsArray[choosenProduct].price_per_kg
+                   );
+        }
+
+        private static void PrintBill(List<BillPosition> billList, double bill)
+        {
+            Console.WriteLine("Drukuję rachunek...");
+            foreach (BillPosition billSegment in billList)
+            {
+                int billPosition = 1;
+                Console.WriteLine($"{billPosition}. {billSegment.name} - zakupiono {billSegment.quantity} {billSegment.unit}, cena: {billSegment.price} zł.");
+                bill += billSegment.price;
+                billPosition++;
+            }
+            Console.WriteLine($"Rachunek osiągnął wysokość: {bill} zł.");
+        }
+
+        private static void HandleCashRegister(Product[] productsArray, List<BillPosition> billList, double bill)
+        {
+            Console.WriteLine("Witamy w naszym warzywniaku!");
+
+            bool isBillOpened = true;
+
+            while (isBillOpened)
+            {
+                billList.Add(SelectProduct(productsArray));
+
+                Console.WriteLine("Czy chcesz kontynuować? Jeżeli tak, naciśnij Y. Jeżeli nie - wybierz dowolny klawisz, aby wydrukować rachunek.");
+                Console.Write("    Twoja decyzja: ");
+                if (Console.ReadLine().ToUpper() != "Y")
+                {
+                    Console.Clear();
+
+                    PrintBill(billList, bill);
+
+                    Console.WriteLine("Czy chcesz zarejestrować nowego klienta? Jeżeli tak, naciśnij Y. Jeżeli nie - wybierz dowolny klawisz, aby zakończyć pracę programu.");
+                    Console.Write("    Twoja decyzja: ");
+                    if (Console.ReadLine().ToUpper() == "Y")
+                    {
+                        Console.Clear();
+                        bill = 0;
+                        billList.Clear();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Dziękujemy za skorzystanie z programu.");
+                        isBillOpened = !isBillOpened;
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                }
+            }
+            Console.ReadKey();
+        }
+
         static void Main(string[] args)
         {
             double bill = 0;
@@ -129,66 +206,7 @@ namespace WSB_Task4
 
             Product[] productsArray = new Product[5] { apple, banana, potato, tomato, cucumber };
 
-            Console.WriteLine("Witamy w naszym warzywniaku!");
-
-            bool isBillOpened = true;
-
-            while (isBillOpened)
-            {
-                Console.WriteLine("Wybierz produkt z listy poniżej");
-
-                for (int i = 0; i < productsArray.Length; i++)
-                {
-                    Console.WriteLine($"       {i} - {productsArray[i].name.ToUpper()}");
-                }
-
-                Console.Write("     Twój wybór: ");
-                var choosenProduct = int.Parse(Console.ReadLine());
-                Console.WriteLine($"Wybrałeś {productsArray[choosenProduct].name.ToUpper()}. \n");
-
-                Console.Clear();
-
-                billList.Add(HandleProductCustomization(
-                       productsArray[choosenProduct].id,
-                       productsArray[choosenProduct].name,
-                       productsArray[choosenProduct].weight,
-                       productsArray[choosenProduct].price,
-                       productsArray[choosenProduct].price_per_kg
-                ));
-
-                Console.WriteLine("Czy chcesz kontynuować? Jeżeli tak, naciśnij Y. Jeżeli nie - wybierz dowolny klawisz, aby wydrukować rachunek.");
-                Console.Write("    Twoja decyzja: ");
-                if (Console.ReadLine().ToUpper() != "Y")
-                {
-                    Console.Clear();
-
-                    Console.WriteLine("Drukuję rachunek...");
-                    foreach (BillPosition billSegment in billList)
-                    {
-                        int billPosition = 1;
-                        Console.WriteLine($"{billPosition}. {billSegment.name} - zakupiono {billSegment.quantity} {billSegment.unit}, cena: {billSegment.price} zł.");
-                        bill += billSegment.price;
-                        billPosition++;
-                    }
-                    Console.WriteLine($"Rachunek osiągnął wysokość: {bill} zł.");
-
-          //         Console.WriteLine("Czy chcesz zarejestrować nowego klienta? Jeżeli tak, naciśnij Y. Jeżeli nie - wybierz dowolny klawisz, aby zakończyć pracę programu.");
-          //         Console.Write("    Twoja decyzja: ");
-          //         if (Console.ReadLine().ToUpper() != "Y")
-          //         {
-          //               Console.Clear();
-          //             bill = 0;
-          //               billList.Clear();
-          //          } else
-          //          {
-                        isBillOpened = !isBillOpened;
-          //          }
-                } else
-                {
-                    Console.Clear();
-                }
-            }
-            Console.ReadKey();
+            HandleCashRegister(productsArray, billList, bill);           
         }
     }
 }
