@@ -2,20 +2,20 @@
 /* Projekt aplikacji rozpoznającej kasy sklepowej wykorzystującej struktury, przygotowany na zajęcia z Podstaw Programowania sem. I WSB (2021/2022).
  * Autor rozwiązania: Mateusz Stawowski (https://github.com/Mathias007).
  * Link do repozytorium zbiorczego: https://github.com/Mathias007/WSB-Task.
- * 
- * Za pomocą instrukcji warunkowych, pętli oraz typów strukturowych napisać program który obsługuje prostą kasę sklepową z użyciem metod. (✓)
+ * W ramach projektu wykorzystywane są instrukcje warunkowe, pętle, struktury, tablice oraz listy. 
+ * Działanie programu oparte jest w znacznej mierze na odpowiedniej sieci metod, odpowiadających za poszczególne funkcjonalności.
+ *  
+ * Oczekiwane działanie programu:
  * Sklep ma mieć zdefiniowaną strukturę artykułów. Należy uwzględnić cenę za sztukę i osobno cenę za kg! (✓)
  * Artykułów ma być max 5. zdefiniowanych jako elementy struktury! (✓)
  * Użytkownik (Kasjer) ma mieć możliwość wybierania artykułu (✓), podawania jego ilości (✓), lub wagi (✓).
  * 
- * Oczekiwane działanie programu:
  * Powitanie (✓) -> Wybór artykuły (✓) -> Czyszczenie ekranu i zadanie pytania o ilość danego artykułu (✓) 
  * -> Wprowadzenie danych (✓) -> Pytanie czy kasjer chce dodać następny czy ma wydrukować paragon (✓)
  * -> Jeśli następny towar, ponowne czyszczenie ekranu i wybór artykułu (✓) -> powtórzenie dodawania i pytania (✓)
  * -> Jeśli zakończenie to ma pojawić się lista zakupionych towarów wraz z ich ilością oraz ceną, oraz podsumowanie kwoty całego rachunku (✓)
  * -> Opcja zamknij program / Nowy Klient (✓)
  */
-
 
 using System;
 using System.Collections.Generic;
@@ -123,7 +123,7 @@ namespace WSB_Task4
             Console.WriteLine($"Rachunek osiągnął wysokość: {bill} zł.");
         }
 
-        private static void HandleCashRegister(Product[] productsArray, List<BillPosition> billList, double bill)
+        private static void HandleCashRegister(Product[] productsArray, List<BillPosition> billList, double billToPay)
         {
             Console.WriteLine("Witamy w naszym warzywniaku!");
 
@@ -139,14 +139,14 @@ namespace WSB_Task4
                 {
                     Console.Clear();
 
-                    PrintBill(billList, bill);
+                    PrintBill(billList, billToPay);
 
                     Console.WriteLine("Czy chcesz zarejestrować nowego klienta? Jeżeli tak, naciśnij Y. Jeżeli nie - wybierz dowolny klawisz, aby zakończyć pracę programu.");
                     Console.Write("    Twoja decyzja: ");
                     if (Console.ReadLine().ToUpper() == "Y")
                     {
                         Console.Clear();
-                        bill = 0;
+                        billToPay = 0;
                         billList.Clear();
                     }
                     else
@@ -165,7 +165,7 @@ namespace WSB_Task4
 
         static void Main(string[] args)
         {
-            double bill = 0;
+            double billToPay = 0;
             var billList = new List<BillPosition>();
 
             Product apple;
@@ -206,7 +206,7 @@ namespace WSB_Task4
 
             Product[] productsArray = new Product[5] { apple, banana, potato, tomato, cucumber };
 
-            HandleCashRegister(productsArray, billList, bill);           
+            HandleCashRegister(productsArray, billList, billToPay);           
         }
     }
 }
