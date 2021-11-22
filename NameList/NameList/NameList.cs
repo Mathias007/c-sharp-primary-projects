@@ -7,7 +7,7 @@ using System.IO;
  * Autor rozwiązania: Mateusz Stawowski (https://github.com/Mathias007).
  * Link do repozytorium zbiorczego: https://github.com/Mathias007/WSB-Task.
  * Program wczytuje listę z pliku tekstowego, tworzy z pobranych danych listę, a następnie wyświetla:
-     1. Element 246 z listy
+     1. Element 246 z listy (przyjąłem, że chodzi o element pod indeksem 246, a nie 246. element listy)
      2. Tylko osoby o imieniu Anna.
  * Praktyczne operacje z plikiem i ścieżką, a także zastosowanie list, foreach, metod i lambdy na prostym przykładzie. 
  */
