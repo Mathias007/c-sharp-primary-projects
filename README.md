@@ -6,4 +6,5 @@ Repozytorium przygotowane dla zadań wykonywanych w ramach zajęć z Podstaw Pro
 2. **Generator tablicy dwuwymiarowej**, którego celem jest wypełnienie poszczególnych ćwiartek różnymi rodzajami znaków. Główny cel projektu to znalezienie i optymalne zaimplementowanie algorytmu operującego na tablicy przyjmującej formę macierzy kwadratowej.
 3. **Test pierwszości**, pozwalający na sprawdzenie, czy wpisana przez użytkownika liczba jest liczbą pierwszą. Praktyczne wykorzystanie rekurencji (bez stosowania pętli).
 4. **Kasa sklepowa**, symulująca wybór określonej ilości produktów i wydrukowanie paragonu. Główną intencję programu stanowi zapoznanie się ze strukturami wartościowymi (struct) oraz ich obsługa przy użyciu metod.
-5. **Lista nazwisk**, stworzona na podstawie danych z pliku tekstowego, z której wyodrębniane są konkretne informacje. 
+5. **Lista nazwisk**, stworzona na podstawie danych z pliku tekstowego, z której wyodrębniane są konkretne informacje.
+6. **Ksiązka telefoniczna**, w której wykorzystywane są typy generyczne i operacje na nich (w tym wypadku słowniki), z wykorzystaniem obsługi komend klawiszowych, pętli, instrukcji warunkowych oraz kolorowania konsoli dla celów estetycznych.
